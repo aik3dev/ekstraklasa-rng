@@ -1,0 +1,184 @@
+<!DOCTYPE html>
+<html lang="pl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Ekstraklasa Dice Squad</title>
+    <link href="https://fonts.googleapis.com/css2?family=Oswald:wght@400;600;700&family=Inter:wght@400;600&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <!-- EKRAN STARTOWY -->
+    <div id="start-screen" class="screen active">
+        <h1>EKSTRAKLASA<br><span>DICE SQUAD</span></h1>
+        <p>Zbuduj swoją drużynę 11 zawodników rzucając kostką i wygraj ligę!</p>
+        <div class="menu-section">
+            <h3 class="section-title">Wybierz formację</h3>
+            <div class="option-cards formation-options">
+                <label class="option-card">
+                    <input type="radio" name="formation-select" value="4-3-3" checked>
+                    <div class="card-inner">
+                        <span class="icon">🛡️</span>
+                        <span class="title">4-3-3</span>
+                    </div>
+                </label>
+                <label class="option-card">
+                    <input type="radio" name="formation-select" value="4-4-2">
+                    <div class="card-inner">
+                        <span class="icon">⚔️</span>
+                        <span class="title">4-4-2</span>
+                    </div>
+                </label>
+                <label class="option-card">
+                    <input type="radio" name="formation-select" value="3-5-2">
+                    <div class="card-inner">
+                        <span class="icon">🚀</span>
+                        <span class="title">3-5-2</span>
+                    </div>
+                </label>
+            </div>
+        </div>
+
+        <div class="menu-section">
+            <h3 class="section-title">Wybierz tryb gry</h3>
+            <div class="option-cards mode-options">
+                <label class="option-card mode-card">
+                    <input type="radio" name="mode-select" value="normal" checked>
+                    <div class="card-inner">
+                        <span class="title">Rygorystyczny</span>
+                        <span class="desc">Dopasuj do narzuconych z góry pozycji na boisku. Masz 3 Rerolle.</span>
+                    </div>
+                </label>
+                <label class="option-card mode-card">
+                    <input type="radio" name="mode-select" value="hard">
+                    <div class="card-inner">
+                        <span class="title">Rygorystyczny HARD</span>
+                        <span class="desc">Dopasuj do z góry określonych pozycji. 0 Rerolli. Pełen hardcore.</span>
+                    </div>
+                </label>
+                <label class="option-card mode-card">
+                    <input type="radio" name="mode-select" value="free">
+                    <div class="card-inner">
+                        <span class="title">Swobodny</span>
+                        <span class="desc">Bierz kogo chcesz, wsadzaj na jego naturalną pozycję. Masz 3 Rerolle.</span>
+                    </div>
+                </label>
+                <label class="option-card mode-card">
+                    <input type="radio" name="mode-select" value="free-hard">
+                    <div class="card-inner">
+                        <span class="title">Swobodny HARD</span>
+                        <span class="desc">Bierz kogo chcesz na naturalną pozycję, ale 0 Rerolli na całą ligę.</span>
+                    </div>
+                </label>
+            </div>
+        </div>
+
+        <button id="start-btn" class="btn primary btn-huge">ZAGRAJ</button>
+    </div>
+
+    <!-- EKRAN BUDOWANIA SKŁADU -->
+    <div id="build-screen" class="screen">
+        <div class="build-container">
+            <!-- Lewa kolumna: Kostka i Wybór -->
+            <div class="dice-panel">
+                <div class="progress-info">
+                    <h2>BUDOWANIE SKŁADU</h2>
+                    <p id="current-position-text">Wybierasz: <span id="pos-highlight">Bramkarz (GK)</span></p>
+                    <div class="progress-bar">
+                        <div id="progress-fill" style="width: 0%"></div>
+                    </div>
+                </div>
+
+                <div class="dice-area">
+                    <button id="roll-dice-btn" class="btn action">🎲 RZUĆ KOSTKĄ</button>
+                    <div id="dice-result" class="hidden">
+                        <div class="club-logo" id="result-logo">⚽</div>
+                        <h3 id="result-club">Legia Warszawa</h3>
+                        <p id="result-season">Sezon 2021/22</p>
+                    </div>
+                </div>
+
+                <div id="player-selection" class="hidden">
+                    <h4>Wybierz zawodnika:</h4>
+                    <div id="player-list" class="player-list">
+                        <!-- Generowane dynamicznie -->
+                    </div>
+                    <div class="reroll-container" id="reroll-container" style="text-align: center; margin-top: 15px;">
+                        <button id="reroll-btn" class="btn secondary" style="padding: 8px 16px; font-size: 0.9rem;">REROLL (Pozostało: 3)</button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Prawa kolumna: Boisko -->
+            <div class="pitch-panel">
+                <div class="pitch">
+                    <div class="pitch-lines"></div>
+                    <!-- Formacja renderowana dynamicznie w game.js -->
+                    <div class="formation" id="pitch-formation">
+                    </div>
+                </div>
+                <div class="squad-stats">
+                    OVR: <span id="squad-rating">0</span>
+                </div>
+                <button id="start-sim-btn" class="btn success hidden">ROZPOCZNIJ SEZON</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- EKRAN SYMULACJI LIGI -->
+    <div id="sim-screen" class="screen">
+        <div class="sim-container">
+            <div class="sim-header">
+                <h2>EKSTRAKLASA</h2>
+                <p>Kolejka: <span id="matchday">1</span> / 34</p>
+                <div class="sim-actions">
+                    <button id="next-matchday-btn" class="btn action">NASTĘPNA KOLEJKA</button>
+                    <button id="sim-rest-btn" class="btn warning">SYMULUJ DO KOŃCA</button>
+                </div>
+            </div>
+
+            <div class="sim-content">
+                <!-- Tabela -->
+                <div class="table-panel">
+                    <table id="league-table">
+                        <thead>
+                            <tr>
+                                <th>#</th>
+                                <th>Klub</th>
+                                <th>M</th>
+                                <th>PKT</th>
+                                <th>Z</th>
+                                <th>R</th>
+                                <th>P</th>
+                                <th>B+</th>
+                                <th>B-</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <!-- Generowane dynamicznie -->
+                        </tbody>
+                    </table>
+                </div>
+
+                <!-- Wyniki kolejki -->
+                <div class="results-panel">
+                    <h3>Wyniki</h3>
+                    <div id="match-results" class="results-list">
+                        <!-- Generowane dynamicznie -->
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- EKRAN KONCOWY -->
+    <div id="end-screen" class="screen">
+        <h1>KONIEC SEZONU</h1>
+        <h2 id="final-position">Zająłeś 1. miejsce!</h2>
+        <button id="restart-btn" class="btn primary">ZAGRAJ PONOWNIE</button>
+    </div>
+
+    <script src="data.js"></script>
+    <script src="game.js"></script>
+</body>
+</html>
